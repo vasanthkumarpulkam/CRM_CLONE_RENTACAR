@@ -1,0 +1,76 @@
+feature,area,priority,original,clone,notes
+User authentication (email/password),Auth,must,yes,no,
+Role-based access (admin/staff),Auth,must,yes,no,
+Company/tenant isolation,Auth,must,yes,no,Multi-tenant SaaS pattern
+Dashboard - daily manifest,Dashboard,must,yes,no,Pickups/returns/overdues for today
+Dashboard - utilization graph,Dashboard,should,yes,no,Vehicle utilization %
+Dashboard - quick pickup search,Dashboard,should,yes,no,Search by RA# or customer name
+Dashboard - bookings tab,Dashboard,must,yes,no,
+Dashboard - availability tab,Dashboard,must,yes,no,
+Dashboard - fleet status tab,Dashboard,should,yes,no,
+Dashboard - overdues tab,Dashboard,must,yes,no,
+Reservation list with filters,Reservations,must,yes,no,
+Create new reservation wizard (9 steps),Reservations,must,yes,no,Core product loop
+Step 1: Pick dates and locations,Reservations,must,yes,no,
+Step 2: Select vehicle class,Reservations,must,yes,no,
+Step 3: Add extras/features,Reservations,should,yes,no,
+Step 4: Attach customer,Reservations,must,yes,no,
+Step 5: Confirm & review,Reservations,must,yes,no,With alerts/warnings
+Step 6: Record payments,Reservations,must,yes,no,
+Step 7: Pickup process,Reservations,must,yes,no,Odometer/fuel/condition
+Step 8: Contract/agreement,Reservations,must,yes,no,PDF generation
+Step 9: Return process,Reservations,must,yes,no,Condition check + final charges
+Reservation history/audit trail,Reservations,should,yes,no,
+RA# auto-generation,Reservations,must,yes,no,Sequential or formatted
+Rental type toggle (daily/weekly/monthly),Reservations,must,yes,no,
+Security deposit tracking,Reservations,must,yes,no,
+Balance due calculation,Reservations,must,yes,no,
+Reservation status workflow,Reservations,must,yes,no,pending/confirmed/active/returned/cancelled
+Edit/modify existing reservation,Reservations,must,yes,no,
+Cancel reservation,Reservations,must,yes,no,
+Print/email agreement PDF,Reservations,must,yes,no,
+Print/email receipt PDF,Reservations,must,yes,no,
+Email templates,Reservations,should,yes,no,
+Reservation attempts (incomplete),Reservations,should,yes,no,Track abandoned bookings
+Quotes list,Quotes,should,yes,no,
+Create quote (same wizard),Quotes,should,yes,no,
+Convert quote to reservation,Quotes,should,yes,no,
+Send quote to customer,Quotes,could,yes,no,
+Quote expiry,Quotes,could,yes,no,
+Payment recording,Payments,must,yes,no,
+Multiple payment methods (cash/card/check),Payments,must,yes,no,
+Payment list/history,Payments,must,yes,no,
+Refunds,Payments,should,yes,no,
+External charges,Payments,could,yes,no,3rd-party charge import
+Stripe integration,Payments,could,no,no,Online payment collection
+Calendar view (month/week),Calendar,must,yes,no,Vehicle availability by date
+Vehicle list,Fleet,must,yes,no,
+Add/edit vehicle,Fleet,must,yes,no,
+Vehicle detail with history,Fleet,must,yes,no,
+Vehicle classes/categories,Fleet,must,yes,no,
+Vehicle status management,Fleet,must,yes,no,available/rented/maintenance/inactive
+Vehicle files/documents upload,Fleet,should,yes,no,
+Maintenance records,Fleet,should,yes,no,
+Repair orders,Fleet,should,yes,no,
+Telematics/GPS,Fleet,could,yes,no,Requires 3rd-party integration — skip v1
+Contacts list,Contacts,must,yes,no,
+Add/edit contact (customer),Contacts,must,yes,no,
+Contact detail with reservation history,Contacts,must,yes,no,
+License & ID storage,Contacts,should,yes,no,
+Customer blacklist flag,Contacts,should,yes,no,
+Pickup checklist,Checklist,must,yes,no,
+Return checklist,Checklist,must,yes,no,
+Custom checklist templates,Checklist,should,yes,no,
+Custom forms builder,Forms,could,yes,no,Skip v1
+Soft delete / Trash,Data,should,yes,no,
+Real-time availability checking,Core,must,yes,no,Prevent double-booking
+PDF contract generation,Documents,must,yes,no,
+Digital signature,Documents,should,yes,no,
+Settings - company info,Settings,must,yes,no,
+Settings - user management,Settings,must,yes,no,
+Settings - location management,Settings,should,yes,no,Multiple pickup locations
+Settings - pricing/rates,Settings,must,yes,no,
+Settings - email templates,Settings,should,yes,no,
+Dark/light mode,UI,could,no,no,
+Mobile responsive,UI,should,yes,no,
+Search across all records,Search,should,yes,no,
