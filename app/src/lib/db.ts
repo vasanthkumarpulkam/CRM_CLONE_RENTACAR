@@ -39,6 +39,7 @@ export interface VehicleClass {
 export interface Vehicle {
   id: string;
   key: string;
+  label: string;   // display name: "2022 Toyota Corolla" (label column or derived)
   vin: string;
   plate: string;
   make: string;
@@ -285,7 +286,7 @@ export async function getVehicles(status?: VehicleStatus): Promise<Vehicle[]> {
   let query = supabase
     .from("vehicles")
     .select(`
-      id, vehicle_key, vin, plate, year, color, odometer, status, fuel_level,
+      id, vehicle_key, label, vin, plate, year, color, odometer, status, fuel_level,
       vehicle_model:vehicle_models(make, model),
       vehicle_class:vehicle_classes(id, name),
       location:locations(id, name),
@@ -301,13 +302,17 @@ export async function getVehicles(status?: VehicleStatus): Promise<Vehicle[]> {
 
   return data.map((v: any) => {
     const activeRes = v.active_reservations?.find((r: any) => r.contact);
+    const make = v.vehicle_model?.make ?? "";
+    const model = v.vehicle_model?.model ?? "";
+    const displayLabel = v.label || (make && model ? `${v.year ?? ""} ${make} ${model}`.trim() : v.vehicle_key ?? "");
     return {
       id: v.id,
       key: v.vehicle_key ?? "",
+      label: displayLabel,
       vin: v.vin ?? "",
       plate: v.plate ?? "",
-      make: v.vehicle_model?.make ?? "",
-      model: v.vehicle_model?.model ?? "",
+      make,
+      model,
       year: v.year ?? 0,
       color: v.color ?? "",
       class_id: v.vehicle_class?.id ?? "",
