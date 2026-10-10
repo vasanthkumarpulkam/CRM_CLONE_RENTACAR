@@ -3,7 +3,7 @@ export const instant = false;
 import { connection } from "next/server";
 import Link from "next/link";
 import { Plus, AlertTriangle } from "lucide-react";
-import { getContacts } from "@/lib/data";
+import { getContacts } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
 

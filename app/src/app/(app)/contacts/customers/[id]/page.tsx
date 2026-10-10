@@ -3,7 +3,7 @@ export const instant = false;
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, Mail, Phone, MapPin, CreditCard, AlertTriangle, Edit, Trash2 } from "lucide-react";
-import { getContact, getReservations } from "@/lib/data";
+import { getContact, getReservations } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";

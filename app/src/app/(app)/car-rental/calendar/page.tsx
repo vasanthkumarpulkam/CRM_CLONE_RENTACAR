@@ -1,7 +1,7 @@
 export const instant = false;
 
 import { connection } from "next/server";
-import { getReservations } from "@/lib/data";
+import { getReservations } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";

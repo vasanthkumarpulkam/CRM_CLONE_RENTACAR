@@ -1,30 +1,23 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/app/actions/auth";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [pending, setPending] = React.useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
-    if (!email || !password) {
-      setError("Please enter your email and password.");
-      return;
-    }
-    setLoading(true);
-    // Fake auth — any credentials work in demo mode
-    await new Promise(r => setTimeout(r, 600));
-    setLoading(false);
-    router.push("/dashboard");
+    setPending(true);
+    const formData = new FormData(e.currentTarget);
+    const result = await login(formData);
+    setPending(false);
+    if (result?.error) setError(result.error);
   }
 
   return (
@@ -40,12 +33,11 @@ export default function LoginPage() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="you@rentacar.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
               autoComplete="email"
-              error={!!error && !email}
+              required
             />
           </div>
 
@@ -53,12 +45,11 @@ export default function LoginPage() {
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              name="password"
               type="password"
               placeholder="••••••••"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
               autoComplete="current-password"
-              error={!!error && !password}
+              required
             />
           </div>
 
@@ -66,14 +57,11 @@ export default function LoginPage() {
             <p className="text-xs text-[var(--color-danger)]">{error}</p>
           )}
 
-          <Button type="submit" className="w-full" loading={loading}>
+          <Button type="submit" className="w-full" loading={pending}>
             Sign in
           </Button>
         </form>
       </div>
-      <p className="mt-4 text-center text-xs text-[var(--color-text-muted)]">
-        Demo mode — any credentials accepted
-      </p>
     </div>
   );
 }

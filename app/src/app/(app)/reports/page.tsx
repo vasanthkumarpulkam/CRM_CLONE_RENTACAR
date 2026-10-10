@@ -1,7 +1,7 @@
 export const instant = false;
 
 import { connection } from "next/server";
-import { getDashboardStats, getReservations, getVehicles } from "@/lib/data";
+import { getDashboardStats, getReservations, getVehicles } from "@/lib/db";
 import { BarChart2, TrendingUp, Car, Users, DollarSign, Calendar } from "lucide-react";
 
 export default async function ReportsPage() {

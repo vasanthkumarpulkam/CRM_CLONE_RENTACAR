@@ -1,25 +1,45 @@
 export const instant = false;
 
-import { getVehicles } from "@/lib/data";
-import type { VehicleStatus } from "@/lib/data";
+import { getVehicles } from "@/lib/db";
+import type { VehicleStatus } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { FuelLevelSelector } from "@/components/ui/fuel-level-selector";
 import Link from "next/link";
 
 const STATUS_LABELS: Record<VehicleStatus, string> = {
-  available:   "Available",
-  on_rent:     "On Rent",
-  dirty:       "Dirty",
-  maintenance: "Maintenance",
-  repair:      "Repair",
+  available:     "Available",
+  on_rent:       "On Rent",
+  dirty:         "Dirty",
+  maintenance:   "Maintenance",
+  repair:        "Repair",
+  out_of_service: "Out of Service",
+  on_sale:       "On Sale",
+  sold:          "Sold",
+  complementary: "Complementary",
+  new:           "New",
+  reserved:      "Reserved",
+  stolen:        "Stolen",
+  recovered:     "Recovered",
+  totaled:       "Totaled",
+  repossessed:   "Repossessed",
 };
 
 const STATUS_BADGE: Record<VehicleStatus, "active" | "confirmed" | "pending" | "returned" | "cancelled" | "info" | "warning"> = {
-  available:   "active",
-  on_rent:     "confirmed",
-  dirty:       "warning",
-  maintenance: "pending",
-  repair:      "cancelled",
+  available:     "active",
+  on_rent:       "confirmed",
+  dirty:         "warning",
+  maintenance:   "pending",
+  repair:        "cancelled",
+  out_of_service: "cancelled",
+  on_sale:       "info",
+  sold:          "returned",
+  complementary: "info",
+  new:           "info",
+  reserved:      "confirmed",
+  stolen:        "cancelled",
+  recovered:     "warning",
+  totaled:       "cancelled",
+  repossessed:   "cancelled",
 };
 
 interface Props {

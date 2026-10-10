@@ -3,7 +3,7 @@ import {
   Wrench, Droplets, TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
-import { getDashboardStats, getReservations, getVehicles } from "@/lib/data";
+import { getDashboardStats, getReservations, getVehicles } from "@/lib/db";
 export const instant = false;
 
 import { connection } from "next/server";

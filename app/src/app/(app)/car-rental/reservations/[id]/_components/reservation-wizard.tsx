@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Reservation } from "@/lib/data";
+import type { Reservation } from "@/lib/db";
 
 const STEPS = [
   { n: 1, label: "Quote" },

@@ -6,7 +6,7 @@ import {
   ChevronLeft, Edit, Printer, Copy, Trash2,
   MapPin, User, Car, Fuel, Gauge,
 } from "lucide-react";
-import { getReservation } from "@/lib/data";
+import { getReservation } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FuelLevelSelector } from "@/components/ui/fuel-level-selector";
