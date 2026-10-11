@@ -18,7 +18,7 @@ Step 4: Attach customer,Reservations,must,yes,yes,Customer selection list wired 
 Step 5: Confirm & review,Reservations,must,yes,yes,Checkout summary step with full pricing breakdown; calls submitReservation
 Step 6: Record payments,Reservations,must,yes,yes,Payment form in reservation wizard step 6; cash/card/check/other; recordPayment action wired
 Step 7: Pickup process,Reservations,must,yes,yes,Pickup form in wizard step 8; odometer + fuel; recordPickup action wired
-Step 8: Contract/agreement,Reservations,must,yes,no,PDF generation not implemented
+Step 8: Contract/agreement,Reservations,must,yes,yes,Agreement page at /reservations/[id]/agreement with printable terms and signatures
 Step 9: Return process,Reservations,must,yes,yes,Return form in wizard step 9; odometer + fuel + charge fuel flag; recordReturn action wired
 Reservation history/audit trail,Reservations,should,yes,no,Not built
 RA# auto-generation,Reservations,must,yes,yes,next_ra_number Supabase RPC called in createReservation; sequential RA-XXXX format
@@ -27,7 +27,7 @@ Security deposit tracking,Reservations,must,yes,yes,Security deposit field in St
 Balance due calculation,Reservations,must,yes,yes,Running total shown in checkout step; balance_due_cents updated on payment
 Reservation status workflow,Reservations,must,yes,yes,Status badges and filter tabs match original
 Edit/modify existing reservation,Reservations,must,yes,yes,Edit form at /reservations/[id]/edit; dates, locations, rental type, rate, notes
-Cancel reservation,Reservations,must,yes,partial,Cancel button present in detail; no backend action
+Cancel reservation,Reservations,must,yes,yes,Cancel button wired with server action; updates status to cancelled
 Print/email agreement PDF,Reservations,must,yes,partial,Browser print available via Print button; dedicated PDF generation not implemented
 Print/email receipt PDF,Reservations,must,yes,partial,Browser print available via Print button; dedicated PDF generation not implemented
 Email templates,Reservations,should,yes,no,Email not configured; Resend keys not set up

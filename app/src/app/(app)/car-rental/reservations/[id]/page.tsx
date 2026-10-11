@@ -1,17 +1,18 @@
 export const instant = false;
 
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import {
   ChevronLeft, Printer, Copy, Trash2,
   MapPin, User, Car, CreditCard,
 } from "lucide-react";
-import { getReservation, getPayments } from "@/lib/db";
+import { getReservation, getPayments, updateReservationStatus } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FuelLevelSelector } from "@/components/ui/fuel-level-selector";
 import { formatCents, formatDate } from "@/lib/utils";
 import { ReservationWizard } from "./_components/reservation-wizard";
+import { revalidatePath } from "next/cache";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -31,6 +32,13 @@ export default async function ReservationDetailPage({ params }: Props) {
     getPayments(id),
   ]);
   if (!reservation) notFound();
+
+  async function handleCancel() {
+    "use server";
+    await updateReservationStatus(id, "cancelled");
+    revalidatePath(`/car-rental/reservations/${id}`);
+    redirect(`/car-rental/reservations/${id}`);
+  }
 
   const r = reservation;
 
@@ -60,6 +68,11 @@ export default async function ReservationDetailPage({ params }: Props) {
             <Printer className="h-3.5 w-3.5" />
             Print
           </Button>
+          <Link href={`/car-rental/reservations/${id}/agreement`}>
+            <Button variant="ghost" size="sm">
+              Agreement
+            </Button>
+          </Link>
           <Button variant="ghost" size="sm">
             <Copy className="h-3.5 w-3.5" />
             Duplicate
@@ -69,10 +82,12 @@ export default async function ReservationDetailPage({ params }: Props) {
               Edit
             </Button>
           </Link>
-          <Button variant="danger" size="sm">
-            <Trash2 className="h-3.5 w-3.5" />
-            Cancel
-          </Button>
+          <form action={handleCancel}>
+            <Button type="submit" variant="danger" size="sm">
+              <Trash2 className="h-3.5 w-3.5" />
+              Cancel
+            </Button>
+          </form>
         </div>
       </div>
 
