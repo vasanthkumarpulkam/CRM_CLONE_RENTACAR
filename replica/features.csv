@@ -28,8 +28,8 @@ Balance due calculation,Reservations,must,yes,yes,Running total shown in checkou
 Reservation status workflow,Reservations,must,yes,yes,Status badges and filter tabs match original
 Edit/modify existing reservation,Reservations,must,yes,yes,Edit form at /reservations/[id]/edit; dates, locations, rental type, rate, notes
 Cancel reservation,Reservations,must,yes,partial,Cancel button present in detail; no backend action
-Print/email agreement PDF,Reservations,must,yes,no,PDF not implemented
-Print/email receipt PDF,Reservations,must,yes,no,PDF not implemented
+Print/email agreement PDF,Reservations,must,yes,partial,Browser print available via Print button; dedicated PDF generation not implemented
+Print/email receipt PDF,Reservations,must,yes,partial,Browser print available via Print button; dedicated PDF generation not implemented
 Email templates,Reservations,should,yes,no,Email not configured; Resend keys not set up
 Reservation attempts (incomplete),Reservations,should,yes,yes,Full table at /reservation-attempts
 Quotes list,Quotes,should,yes,yes,Quotes table at /quotes
@@ -58,13 +58,13 @@ Add/edit contact (customer),Contacts,must,yes,yes,Add customer form at /contacts
 Contact detail with reservation history,Contacts,must,yes,yes,Customer detail page with reservation list
 License & ID storage,Contacts,should,yes,yes,DL number + expiry with warning icon on list
 Customer blacklist flag,Contacts,should,yes,no,Not implemented
-Pickup checklist,Checklist,must,yes,no,Not built
-Return checklist,Checklist,must,yes,no,Not built
+Pickup checklist,Checklist,must,yes,yes,Pre-rental inspection form at /car-rental/checklists/pickup/[id]
+Return checklist,Checklist,must,yes,yes,Post-rental inspection form at /car-rental/checklists/return/[id]
 Custom checklist templates,Checklist,should,yes,no,Not built
 Custom forms builder,Forms,could,yes,skip,Skip v1; low priority
 Soft delete / Trash,Data,should,yes,partial,Trash stub page; no restore/delete actions
 Real-time availability checking,Core,must,yes,yes,Double-booking check in createReservation; throws if vehicle conflicts with existing confirmed/active
-PDF contract generation,Documents,must,yes,no,Not implemented
+PDF contract generation,Documents,must,yes,partial,Browser print available; server-side PDF generation not implemented
 Digital signature,Documents,should,yes,no,Not implemented
 Settings - company info,Settings,must,yes,yes,Settings page with company/location/account sections
 Settings - user management,Settings,must,yes,yes,Team members section in settings with invite stub

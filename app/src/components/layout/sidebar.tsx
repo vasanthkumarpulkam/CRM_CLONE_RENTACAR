@@ -27,6 +27,7 @@ const NAV: NavItem[] = [
       { label: "Reservation Attempts", href: "/car-rental/reservation-attempts" },
       { label: "Quotes",               href: "/car-rental/quotes" },
       { label: "External Charges",     href: "/car-rental/external-charges" },
+      { label: "Checklists",           href: "/car-rental/checklists" },
       { label: "Calendar",             href: "/car-rental/calendar" },
     ],
   },
