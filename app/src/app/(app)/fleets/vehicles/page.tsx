@@ -101,9 +101,10 @@ export default async function VehiclesPage({ searchParams }: Props) {
       {/* Vehicle grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {vehicles.map(v => (
-          <div
+          <Link
             key={v.id}
-            className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 space-y-3"
+            href={`/fleets/vehicles/${v.id}`}
+            className="block rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 space-y-3 hover:border-[var(--color-accent)]/40 transition-colors"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
@@ -150,7 +151,7 @@ export default async function VehiclesPage({ searchParams }: Props) {
                 )}
               </div>
             )}
-          </div>
+          </Link>
         ))}
         {vehicles.length === 0 && (
           <div className="col-span-full py-10 text-center text-sm text-[var(--color-text-muted)]">

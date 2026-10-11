@@ -3,7 +3,7 @@ export const instant = false;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Building2, MapPin, User, Bell, Shield, CreditCard } from "lucide-react";
+import { Building2, MapPin, User, Bell, Shield, CreditCard, Users, DollarSign } from "lucide-react";
 
 const SECTIONS = [
   {
@@ -92,6 +92,70 @@ export default function SettingsPage() {
           </div>
         </div>
       ))}
+
+      {/* User management */}
+      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-[var(--color-border)]">
+          <Users className="h-4 w-4 text-[var(--color-text-muted)]" />
+          <p className="text-sm font-medium text-[var(--color-text)]">Team members</p>
+          <span className="ml-auto text-xs text-[var(--color-text-muted)]">1 member</span>
+        </div>
+        <div className="divide-y divide-[var(--color-border)]">
+          <div className="flex items-center justify-between px-5 py-3">
+            <div>
+              <p className="text-sm font-medium text-[var(--color-text)]">Admin User</p>
+              <p className="text-xs text-[var(--color-text-muted)]">admin@rentacarllc.com · Admin</p>
+            </div>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-medium">You</span>
+          </div>
+        </div>
+        <div className="p-5 pt-3 border-t border-[var(--color-border)]">
+          <Button size="sm" variant="ghost">
+            <Users className="h-3.5 w-3.5" />
+            Invite team member
+          </Button>
+          <p className="text-xs text-[var(--color-text-muted)] mt-2">
+            Invite additional staff to manage reservations and fleet. Multi-role support coming soon.
+          </p>
+        </div>
+      </div>
+
+      {/* Pricing & rates */}
+      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-[var(--color-border)]">
+          <DollarSign className="h-4 w-4 text-[var(--color-text-muted)]" />
+          <p className="text-sm font-medium text-[var(--color-text)]">Pricing &amp; rates</p>
+        </div>
+        <div className="p-5 space-y-4">
+          <p className="text-sm text-[var(--color-text-muted)]">
+            Default daily, weekly, and monthly rates are set per vehicle class.
+            These rates auto-fill when a new reservation is created.
+          </p>
+          <div className="grid grid-cols-3 gap-4">
+            {["Daily rate", "Weekly rate", "Monthly rate"].map(label => (
+              <div key={label} className="space-y-1.5">
+                <Label>{label}</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[var(--color-text-muted)]">$</span>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    placeholder="0.00"
+                    className="pl-6"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--color-text-muted)]">
+            To set rates per class, go to each vehicle class in Fleet → Vehicle Classes.
+          </p>
+          <div className="flex justify-end">
+            <Button size="sm">Save Rates</Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

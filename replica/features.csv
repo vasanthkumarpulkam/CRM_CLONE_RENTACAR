@@ -46,7 +46,7 @@ Stripe integration,Payments,could,no,no,Skip v1; original also does not have it
 Calendar view (month/week),Calendar,must,yes,yes,Month calendar with reservation blocks + upcoming list
 Vehicle list,Fleet,must,yes,yes,Vehicle grid with status filter tabs and fuel indicators
 Add/edit vehicle,Fleet,must,yes,yes,Add vehicle form at /fleets/vehicles/new with server action
-Vehicle detail with history,Fleet,must,yes,no,No vehicle detail page
+Vehicle detail with history,Fleet,must,yes,yes,Vehicle detail page with info cards and reservation history
 Vehicle classes/categories,Fleet,must,yes,yes,Vehicle classes seeded; used in wizard and dashboard
 Vehicle status management,Fleet,must,yes,yes,15 status values; filter tabs + badge on vehicle grid
 Vehicle files/documents upload,Fleet,should,yes,no,Not implemented
@@ -63,13 +63,13 @@ Return checklist,Checklist,must,yes,no,Not built
 Custom checklist templates,Checklist,should,yes,no,Not built
 Custom forms builder,Forms,could,yes,skip,Skip v1; low priority
 Soft delete / Trash,Data,should,yes,partial,Trash stub page; no restore/delete actions
-Real-time availability checking,Core,must,yes,no,No double-booking prevention
+Real-time availability checking,Core,must,yes,yes,Double-booking check in createReservation; throws if vehicle conflicts with existing confirmed/active
 PDF contract generation,Documents,must,yes,no,Not implemented
 Digital signature,Documents,should,yes,no,Not implemented
 Settings - company info,Settings,must,yes,yes,Settings page with company/location/account sections
-Settings - user management,Settings,must,yes,no,No user management UI
+Settings - user management,Settings,must,yes,yes,Team members section in settings with invite stub
 Settings - location management,Settings,should,yes,yes,Locations section in settings
-Settings - pricing/rates,Settings,must,yes,no,No pricing/rate configuration UI
+Settings - pricing/rates,Settings,must,yes,yes,Pricing & rates section in settings with daily/weekly/monthly inputs
 Settings - email templates,Settings,should,yes,no,No email template editor
 Dark/light mode,UI,could,no,no,Original does not have it either; skip
 Mobile responsive,UI,should,yes,yes,Responsive grid + hidden columns on mobile + mobile nav

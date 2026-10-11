@@ -335,6 +335,11 @@ export async function getVehicle(id: string): Promise<Vehicle | null> {
   return vs.find(v => v.id === id) ?? null;
 }
 
+export async function getVehicleReservations(vehicleId: string): Promise<Reservation[]> {
+  const all = await getReservations();
+  return all.filter(r => r.vehicle_id === vehicleId);
+}
+
 // ─── Contacts ────────────────────────────────────────────────────────────────
 
 export async function getContacts(category?: ContactCategory): Promise<Contact[]> {
@@ -482,6 +487,20 @@ export async function createReservation(input: CreateReservationInput) {
     .single();
 
   if (!crmUser) throw new Error("User not found");
+
+  // Double-booking prevention: check if the selected vehicle is available
+  if (input.vehicle_id && !input.is_quote) {
+    const { data: conflicts } = await supabase
+      .from("reservations")
+      .select("id")
+      .eq("vehicle_id", input.vehicle_id)
+      .in("status", ["confirmed", "active"])
+      .lte("pickup_date", input.return_date)
+      .gte("return_date", input.pickup_date);
+    if (conflicts && conflicts.length > 0) {
+      throw new Error("Vehicle is already booked for the selected dates. Please choose a different vehicle or dates.");
+    }
+  }
 
   const { data: raNumber } = await supabase
     .rpc("next_ra_number", { p_company_id: (crmUser as any).company_id });
