@@ -26,7 +26,7 @@ Rental type toggle (daily/weekly/monthly),Reservations,must,yes,yes,Segmented to
 Security deposit tracking,Reservations,must,yes,yes,Security deposit field in Step 5 (rates); stored in DB
 Balance due calculation,Reservations,must,yes,yes,Running total shown in checkout step; balance_due_cents updated on payment
 Reservation status workflow,Reservations,must,yes,yes,Status badges and filter tabs match original
-Edit/modify existing reservation,Reservations,must,yes,no,No edit flow implemented
+Edit/modify existing reservation,Reservations,must,yes,yes,Edit form at /reservations/[id]/edit; dates, locations, rental type, rate, notes
 Cancel reservation,Reservations,must,yes,partial,Cancel button present in detail; no backend action
 Print/email agreement PDF,Reservations,must,yes,no,PDF not implemented
 Print/email receipt PDF,Reservations,must,yes,no,PDF not implemented

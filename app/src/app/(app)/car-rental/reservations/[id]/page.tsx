@@ -64,6 +64,11 @@ export default async function ReservationDetailPage({ params }: Props) {
             <Copy className="h-3.5 w-3.5" />
             Duplicate
           </Button>
+          <Link href={`/car-rental/reservations/${id}/edit`}>
+            <Button variant="ghost" size="sm">
+              Edit
+            </Button>
+          </Link>
           <Button variant="danger" size="sm">
             <Trash2 className="h-3.5 w-3.5" />
             Cancel

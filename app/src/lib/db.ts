@@ -541,6 +541,10 @@ export async function updateReservationDetails(
     contact_id: string;
     vehicle_id: string;
     vehicle_class_id: string;
+    pickup_date: string;
+    return_date: string;
+    pickup_location_id: string;
+    return_location_id: string;
     rental_type: "daily" | "weekly" | "monthly";
     monthly_rate_cents: number;
     base_rate_cents: number;
