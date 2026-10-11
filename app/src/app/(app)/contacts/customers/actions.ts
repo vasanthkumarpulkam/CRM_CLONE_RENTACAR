@@ -24,16 +24,15 @@ export async function submitAddContact(formData: FormData) {
   await createContact({
     first_name,
     last_name,
-    type: "customer",
-    email:      email      || undefined,
-    phone:      phone      || undefined,
-    address:    address    || undefined,
-    city:       city       || undefined,
-    state:      state      || undefined,
-    zip:        zip        || undefined,
-    dl_number:  dl_number  || undefined,
-    dl_expiry:  dl_expiry  || undefined,
-    notes:      notes      || undefined,
+    category: "customer",
+    email:                 email      || undefined,
+    phone:                 phone      || undefined,
+    street:                address    || undefined,
+    city:                  city       || undefined,
+    state:                 state      || undefined,
+    zip:                   zip        || undefined,
+    dl_number:             dl_number  || undefined,
+    dl_expiration_date:    dl_expiry  || undefined,
   });
 
   revalidatePath("/contacts/customers");

@@ -86,8 +86,12 @@ export interface Reservation {
   return_date: string;
   pickup_location: string;
   return_location: string;
+  rental_type: "daily" | "weekly" | "monthly" | null;
+  base_rate_cents: number | null;
+  security_deposit_cents: number | null;
   total_cents: number;
   outstanding_cents: number;
+  balance_due_cents: number | null;
   fuel_level_out: number | null;
   fuel_level_in: number | null;
   odometer_out: number | null;
@@ -240,6 +244,7 @@ export async function getReservation(id: string): Promise<Reservation | null> {
     .select(`
       id, ra_number, status, contact_id, vehicle_id, vehicle_class_id,
       pickup_date, return_date, total_cents, balance_due_cents,
+      rental_type, base_rate_cents, security_deposit_cents,
       fuel_at_pickup, fuel_at_return, odometer_at_pickup, odometer_at_return,
       notes,
       contact:contacts(first_name, last_name),
@@ -267,8 +272,12 @@ export async function getReservation(id: string): Promise<Reservation | null> {
     return_date: toDateStr((r as any).return_date),
     pickup_location: (r as any).pickup_loc?.name ?? "",
     return_location: (r as any).return_loc?.name ?? "",
+    rental_type: (r as any).rental_type ?? null,
+    base_rate_cents: (r as any).base_rate_cents ?? null,
+    security_deposit_cents: (r as any).security_deposit_cents ?? null,
     total_cents: (r as any).total_cents ?? 0,
     outstanding_cents: (r as any).balance_due_cents ?? 0,
+    balance_due_cents: (r as any).balance_due_cents ?? null,
     fuel_level_out: (r as any).fuel_at_pickup,
     fuel_level_in: (r as any).fuel_at_return,
     odometer_out: (r as any).odometer_at_pickup,
