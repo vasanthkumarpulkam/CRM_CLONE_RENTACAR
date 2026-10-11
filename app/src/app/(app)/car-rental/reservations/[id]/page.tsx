@@ -3,23 +3,33 @@ export const instant = false;
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
-  ChevronLeft, Edit, Printer, Copy, Trash2,
-  MapPin, User, Car, Fuel, Gauge,
+  ChevronLeft, Printer, Copy, Trash2,
+  MapPin, User, Car, CreditCard,
 } from "lucide-react";
-import { getReservation } from "@/lib/db";
+import { getReservation, getPayments } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FuelLevelSelector } from "@/components/ui/fuel-level-selector";
-import { formatCents, formatDate, formatDateTime } from "@/lib/utils";
+import { formatCents, formatDate } from "@/lib/utils";
 import { ReservationWizard } from "./_components/reservation-wizard";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
+const METHOD_LABELS: Record<string, string> = {
+  cash: "Cash",
+  card: "Card",
+  check: "Check",
+  other: "Other",
+};
+
 export default async function ReservationDetailPage({ params }: Props) {
   const { id } = await params;
-  const reservation = await getReservation(id);
+  const [reservation, payments] = await Promise.all([
+    getReservation(id),
+    getPayments(id),
+  ]);
   if (!reservation) notFound();
 
   const r = reservation;
@@ -96,10 +106,13 @@ export default async function ReservationDetailPage({ params }: Props) {
           {r.outstanding_cents > 0 && (
             <p className="text-xs text-[var(--color-danger)]">{formatCents(r.outstanding_cents)} outstanding</p>
           )}
+          {r.outstanding_cents === 0 && r.total_cents > 0 && (
+            <p className="text-xs text-[var(--color-success)]">Paid in full</p>
+          )}
         </div>
       </div>
 
-      {/* Fuel / Odometer row */}
+      {/* Fuel / Odometer row — shown once pickup has been recorded */}
       {(r.fuel_level_out !== null || r.fuel_level_in !== null) && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
           <div>
@@ -147,6 +160,51 @@ export default async function ReservationDetailPage({ params }: Props) {
 
       {/* 9-step wizard */}
       <ReservationWizard reservation={r} />
+
+      {/* Payment history */}
+      {payments.length > 0 && (
+        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]">
+          <div className="flex items-center gap-2 p-4 border-b border-[var(--color-border)]">
+            <CreditCard className="h-4 w-4 text-[var(--color-text-muted)]" />
+            <p className="text-sm font-medium text-[var(--color-text)]">Payment history</p>
+            <span className="ml-auto text-xs text-[var(--color-text-muted)]">
+              {payments.length} {payments.length === 1 ? "payment" : "payments"}
+            </span>
+          </div>
+          <div className="divide-y divide-[var(--color-border)]">
+            {payments.map((p) => (
+              <div key={p.id} className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-[var(--color-text)]">
+                    {METHOD_LABELS[p.method] ?? p.method}
+                  </p>
+                  {p.notes && (
+                    <p className="text-xs text-[var(--color-text-muted)]">{p.notes}</p>
+                  )}
+                  <p className="text-xs text-[var(--color-text-muted)]">
+                    {new Date(p.recorded_at).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+                <p className="text-sm font-semibold text-[var(--color-text)]">
+                  {formatCents(p.amount_cents)}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between items-center px-4 py-3 border-t border-[var(--color-border)] bg-[var(--color-bg)]">
+            <span className="text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wide">Total paid</span>
+            <span className="text-sm font-bold text-[var(--color-text)]">
+              {formatCents(payments.reduce((s, p) => s + p.amount_cents, 0))}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Notes */}
       {r.notes && (

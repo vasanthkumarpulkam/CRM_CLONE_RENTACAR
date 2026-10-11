@@ -10,21 +10,21 @@ Dashboard - availability tab,Dashboard,must,yes,no,Not built; no availability ca
 Dashboard - fleet status tab,Dashboard,should,yes,yes,Fleet status grid on dashboard
 Dashboard - overdues tab,Dashboard,must,yes,no,Not built; overdue reservations tab missing
 Reservation list with filters,Reservations,must,yes,yes,Status filter tabs + sortable table
-Create new reservation wizard (9 steps),Reservations,must,yes,partial,9-step UI built; createReservation server action not wired to submit
-Step 1: Pick dates and locations,Reservations,must,yes,partial,Date pickers + location selects render; no form submission
-Step 2: Select vehicle class,Reservations,must,yes,partial,Vehicle class cards render; selection state only
-Step 3: Add extras/features,Reservations,should,yes,no,Extras step not built in wizard
-Step 4: Attach customer,Reservations,must,yes,partial,Customer selection list renders; not wired to submit
-Step 5: Confirm & review,Reservations,must,yes,partial,Review step renders; no backend confirmation action
-Step 6: Record payments,Reservations,must,yes,no,Payment recording not wired to any UI
-Step 7: Pickup process,Reservations,must,yes,no,Pickup action not wired; no odometer/fuel capture on submit
+Create new reservation wizard (9 steps),Reservations,must,yes,yes,9-step wizard wired; submitReservation server action saves to DB and returns RA#
+Step 1: Pick dates and locations,Reservations,must,yes,yes,Dates + locations + rental type toggle fully wired
+Step 2: Select vehicle class,Reservations,must,yes,yes,Vehicle class cards with rate auto-fill; wired to submit
+Step 3: Add extras/features,Reservations,should,yes,no,Extras step stub only
+Step 4: Attach customer,Reservations,must,yes,yes,Customer selection list wired to submit
+Step 5: Confirm & review,Reservations,must,yes,yes,Checkout summary step with full pricing breakdown; calls submitReservation
+Step 6: Record payments,Reservations,must,yes,yes,Payment form in reservation wizard step 6; cash/card/check/other; recordPayment action wired
+Step 7: Pickup process,Reservations,must,yes,yes,Pickup form in wizard step 8; odometer + fuel; recordPickup action wired
 Step 8: Contract/agreement,Reservations,must,yes,no,PDF generation not implemented
-Step 9: Return process,Reservations,must,yes,no,Return action not wired; no damage/fuel capture on submit
+Step 9: Return process,Reservations,must,yes,yes,Return form in wizard step 9; odometer + fuel + charge fuel flag; recordReturn action wired
 Reservation history/audit trail,Reservations,should,yes,no,Not built
-RA# auto-generation,Reservations,must,yes,no,No sequential RA number generation
-Rental type toggle (daily/weekly/monthly),Reservations,must,yes,no,Not in wizard
-Security deposit tracking,Reservations,must,yes,no,Not built
-Balance due calculation,Reservations,must,yes,no,No balance/due calculation UI
+RA# auto-generation,Reservations,must,yes,yes,next_ra_number Supabase RPC called in createReservation; sequential RA-XXXX format
+Rental type toggle (daily/weekly/monthly),Reservations,must,yes,yes,Segmented toggle in wizard Step 1; rate inputs adapt to rental type
+Security deposit tracking,Reservations,must,yes,yes,Security deposit field in Step 5 (rates); stored in DB
+Balance due calculation,Reservations,must,yes,yes,Running total shown in checkout step; balance_due_cents updated on payment
 Reservation status workflow,Reservations,must,yes,yes,Status badges and filter tabs match original
 Edit/modify existing reservation,Reservations,must,yes,no,No edit flow implemented
 Cancel reservation,Reservations,must,yes,partial,Cancel button present in detail; no backend action
@@ -37,9 +37,9 @@ Create quote (same wizard),Quotes,should,yes,no,No create quote flow
 Convert quote to reservation,Quotes,should,yes,no,Not implemented
 Send quote to customer,Quotes,could,yes,no,No email integration
 Quote expiry,Quotes,could,yes,no,Not implemented
-Payment recording,Payments,must,yes,no,No payment recording UI or server action
-Multiple payment methods (cash/card/check),Payments,must,yes,no,Not implemented
-Payment list/history,Payments,must,yes,no,No payment history screen
+Payment recording,Payments,must,yes,yes,recordPayment server action wired; payment form in reservation wizard step 6
+Multiple payment methods (cash/card/check),Payments,must,yes,yes,cash/card/check/other toggle in payment form
+Payment list/history,Payments,must,yes,yes,Payment history sub-table on reservation detail page; shows method/amount/date/notes
 Refunds,Payments,should,yes,no,Not implemented
 External charges,Payments,could,yes,yes,Full table at /external-charges
 Stripe integration,Payments,could,no,no,Skip v1; original also does not have it

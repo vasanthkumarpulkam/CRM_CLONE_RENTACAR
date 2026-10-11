@@ -456,6 +456,17 @@ export interface CreateReservationInput {
   return_date: string;
   pickup_location_id: string;
   return_location_id: string;
+  contact_id?: string;
+  vehicle_id?: string;
+  vehicle_class_id?: string;
+  rental_type?: "daily" | "weekly" | "monthly";
+  monthly_rate_cents?: number;
+  base_rate_cents?: number;
+  security_deposit_cents?: number;
+  total_cents?: number;
+  balance_due_cents?: number;
+  notes?: string;
+  is_quote?: boolean;
 }
 
 export async function createReservation(input: CreateReservationInput) {
@@ -473,20 +484,29 @@ export async function createReservation(input: CreateReservationInput) {
   if (!crmUser) throw new Error("User not found");
 
   const { data: raNumber } = await supabase
-    .rpc("next_ra_number", { p_company_id: crmUser.company_id });
+    .rpc("next_ra_number", { p_company_id: (crmUser as any).company_id });
 
   const { data, error } = await supabase
     .from("reservations")
     .insert({
-      company_id: crmUser.company_id,
+      company_id: (crmUser as any).company_id,
       ra_number: raNumber ?? "RA-0001",
       pickup_date: input.pickup_date,
       return_date: input.return_date,
       pickup_location_id: input.pickup_location_id,
       return_location_id: input.return_location_id,
+      contact_id: input.contact_id ?? null,
+      vehicle_id: input.vehicle_id ?? null,
+      vehicle_class_id: input.vehicle_class_id ?? null,
       status: "pending",
-      rental_type: "monthly",
-      is_quote: false,
+      rental_type: input.rental_type ?? "monthly",
+      is_quote: input.is_quote ?? false,
+      monthly_rate_cents: input.monthly_rate_cents ?? null,
+      base_rate_cents: input.base_rate_cents ?? null,
+      security_deposit_cents: input.security_deposit_cents ?? 0,
+      total_cents: input.total_cents ?? null,
+      balance_due_cents: input.balance_due_cents ?? input.total_cents ?? null,
+      notes: input.notes ?? null,
       created_by: user.id,
     })
     .select("id, ra_number")
@@ -494,6 +514,29 @@ export async function createReservation(input: CreateReservationInput) {
 
   if (error) throw new Error(error.message);
   return data;
+}
+
+export async function updateReservationDetails(
+  id: string,
+  fields: Partial<{
+    contact_id: string;
+    vehicle_id: string;
+    vehicle_class_id: string;
+    rental_type: "daily" | "weekly" | "monthly";
+    monthly_rate_cents: number;
+    base_rate_cents: number;
+    security_deposit_cents: number;
+    total_cents: number;
+    balance_due_cents: number;
+    notes: string;
+  }>
+) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("reservations")
+    .update({ ...fields, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
 }
 
 export async function updateReservationStatus(
@@ -609,6 +652,28 @@ export async function recordPayment(data: {
     .from("reservations")
     .update({ balance_due_cents: balance })
     .eq("id", data.reservation_id);
+}
+
+export interface Payment {
+  id: string;
+  reservation_id: string;
+  amount_cents: number;
+  method: "cash" | "card" | "check" | "other";
+  type: string;
+  notes: string | null;
+  recorded_at: string;
+}
+
+export async function getPayments(reservationId: string): Promise<Payment[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("payments")
+    .select("id, reservation_id, amount_cents, method, type, notes, recorded_at")
+    .eq("reservation_id", reservationId)
+    .order("recorded_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as Payment[];
 }
 
 export async function createContact(data: {
