@@ -676,6 +676,60 @@ export async function getPayments(reservationId: string): Promise<Payment[]> {
   return (data ?? []) as Payment[];
 }
 
+export async function getOverdueReservations(): Promise<Reservation[]> {
+  const today = new Date().toISOString().split("T")[0];
+  const all = await getReservations();
+  return all.filter(r => r.status === "active" && r.return_date < today);
+}
+
+export async function createVehicle(data: {
+  make: string;
+  model: string;
+  year: number;
+  vin?: string;
+  plate: string;
+  color?: string;
+  class_id?: string;
+  location_id?: string;
+  status?: VehicleStatus;
+  fuel_level?: number;
+  odometer?: number;
+}) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { data: crmUser } = await supabase
+    .from("users")
+    .select("company_id")
+    .eq("id", user!.id)
+    .single();
+
+  const label = `${data.year} ${data.make} ${data.model}`;
+
+  const { data: vehicle, error } = await supabase
+    .from("vehicles")
+    .insert({
+      company_id: (crmUser as any).company_id,
+      make: data.make,
+      model: data.model,
+      year: data.year,
+      vin: data.vin ?? null,
+      plate: data.plate,
+      color: data.color ?? null,
+      label,
+      vehicle_class_id: data.class_id ?? null,
+      location_id: data.location_id ?? null,
+      status: data.status ?? "available",
+      fuel_level: data.fuel_level ?? 8,
+      odometer: data.odometer ?? 0,
+    })
+    .select("id")
+    .single();
+
+  if (error) throw new Error(error.message);
+  return vehicle;
+}
+
 export async function createContact(data: {
   first_name: string;
   last_name: string;

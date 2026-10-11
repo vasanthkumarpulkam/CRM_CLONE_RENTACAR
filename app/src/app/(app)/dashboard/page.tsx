@@ -1,28 +1,31 @@
+export const instant = false;
+
 import {
   Car, CalendarCheck, CalendarX, AlertTriangle,
   Wrench, Droplets, TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
-import { getDashboardStats, getReservations, getVehicles } from "@/lib/db";
-export const instant = false;
+import { getDashboardStats, getReservations, getVehicles, getOverdueReservations } from "@/lib/db";
 
 import { connection } from "next/server";
 import { Badge } from "@/components/ui/badge";
 import { TodayLabel } from "@/components/ui/today-label";
 import { formatCents, formatDate } from "@/lib/utils";
+import { DashboardTabs } from "./_components/dashboard-tabs";
 
 export default async function DashboardPage() {
   await connection();
   const today = new Date().toISOString().split("T")[0];
-  const [stats, reservations, vehicles] = await Promise.all([
+  const [stats, reservations, vehicles, overdues] = await Promise.all([
     getDashboardStats(today),
     getReservations(),
     getVehicles(),
+    getOverdueReservations(),
   ]);
 
   const activeReservations = reservations.filter(r =>
     r.status === "active" || r.status === "confirmed"
-  ).slice(0, 5);
+  ).slice(0, 8);
 
   const fleetSummary = [
     { label: "On Rent",      value: stats.fleet_on_rent,    color: "text-[var(--color-accent)]",   bg: "bg-[var(--color-accent)]/10",  icon: Car },
@@ -36,6 +39,20 @@ export default async function DashboardPage() {
     { label: "Returns Today",  value: stats.returns_today, icon: CalendarX,     color: "text-[var(--color-text-muted)]" },
     { label: "Overdue",        value: stats.overdues,      icon: AlertTriangle,  color: "text-[var(--color-danger)]" },
   ];
+
+  // Availability: for the next 14 days, count confirmed+active reservations per day
+  const availabilityDays: { date: string; rented: number; available: number }[] = [];
+  const totalFleet = vehicles.length;
+  for (let i = 0; i < 14; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    const ds = d.toISOString().split("T")[0];
+    const rented = reservations.filter(r =>
+      (r.status === "active" || r.status === "confirmed") &&
+      r.pickup_date <= ds && r.return_date >= ds
+    ).length;
+    availabilityDays.push({ date: ds, rented, available: Math.max(0, totalFleet - rented) });
+  }
 
   return (
     <div className="space-y-6">
@@ -103,55 +120,19 @@ export default async function DashboardPage() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Recent reservations */}
-      <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)]">
-          <h2 className="text-sm font-semibold text-[var(--color-text)]">Active &amp; Upcoming</h2>
-          <Link
-            href="/car-rental/reservations"
-            className="text-xs text-[var(--color-accent)] hover:underline"
-          >
-            View all
-          </Link>
-        </div>
-        <div className="divide-y divide-[var(--color-border)]">
-          {activeReservations.map(r => (
-            <Link
-              key={r.id}
-              href={`/car-rental/reservations/${r.id}`}
-              className="flex items-center gap-4 px-5 py-3 hover:bg-[var(--color-bg)] transition-colors"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[var(--color-text)] truncate">
-                  {r.ra_number}
-                </p>
-                <p className="text-xs text-[var(--color-text-muted)] truncate">
-                  {r.customer_name} · {r.vehicle_class}
-                </p>
-              </div>
-              <div className="text-right shrink-0">
-                <p className="text-xs text-[var(--color-text-muted)]">
-                  {formatDate(r.pickup_date)} → {formatDate(r.return_date)}
-                </p>
-                <p className="text-sm font-medium text-[var(--color-text)]">
-                  {formatCents(r.total_cents)}
-                </p>
-              </div>
-              <Badge variant={r.status as "active" | "confirmed" | "pending" | "returned" | "cancelled"}>
-                {r.status}
-              </Badge>
-            </Link>
-          ))}
-          {activeReservations.length === 0 && (
-            <div className="px-5 py-8 text-center text-sm text-[var(--color-text-muted)]">
-              No active reservations
-            </div>
+          {stats.utilization_by_class.length === 0 && (
+            <p className="text-sm text-[var(--color-text-muted)]">No vehicle class data.</p>
           )}
         </div>
       </div>
+
+      {/* Tabbed section: Bookings | Availability | Overdues */}
+      <DashboardTabs
+        activeReservations={activeReservations}
+        overdueReservations={overdues}
+        availabilityDays={availabilityDays}
+        totalFleet={totalFleet}
+      />
     </div>
   );
 }

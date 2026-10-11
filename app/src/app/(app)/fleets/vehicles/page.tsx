@@ -4,6 +4,8 @@ import { getVehicles } from "@/lib/db";
 import type { VehicleStatus } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { FuelLevelSelector } from "@/components/ui/fuel-level-selector";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
 const STATUS_LABELS: Record<VehicleStatus, string> = {
@@ -61,9 +63,17 @@ export default async function VehiclesPage({ searchParams }: Props) {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-semibold text-[var(--color-text)]">Vehicles</h1>
-        <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{vehicles.length} vehicle{vehicles.length !== 1 ? "s" : ""}</p>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold text-[var(--color-text)]">Vehicles</h1>
+          <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{vehicles.length} vehicle{vehicles.length !== 1 ? "s" : ""}</p>
+        </div>
+        <Link href="/fleets/vehicles/new">
+          <Button size="sm">
+            <Plus className="h-3.5 w-3.5" />
+            Add Vehicle
+          </Button>
+        </Link>
       </div>
 
       {/* Filter tabs */}

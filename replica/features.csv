@@ -6,9 +6,9 @@ Dashboard - daily manifest,Dashboard,must,yes,yes,Pickups/returns/overdues KPI c
 Dashboard - utilization graph,Dashboard,should,yes,yes,Utilization by class progress bars
 Dashboard - quick pickup search,Dashboard,should,yes,partial,Header search input present; no live filtering yet
 Dashboard - bookings tab,Dashboard,must,yes,yes,Recent reservations list on dashboard
-Dashboard - availability tab,Dashboard,must,yes,no,Not built; no availability calendar/grid on dashboard
+Dashboard - availability tab,Dashboard,must,yes,yes,14-day availability grid on dashboard tab
 Dashboard - fleet status tab,Dashboard,should,yes,yes,Fleet status grid on dashboard
-Dashboard - overdues tab,Dashboard,must,yes,no,Not built; overdue reservations tab missing
+Dashboard - overdues tab,Dashboard,must,yes,yes,Overdues tab with overdue reservations list
 Reservation list with filters,Reservations,must,yes,yes,Status filter tabs + sortable table
 Create new reservation wizard (9 steps),Reservations,must,yes,yes,9-step wizard wired; submitReservation server action saves to DB and returns RA#
 Step 1: Pick dates and locations,Reservations,must,yes,yes,Dates + locations + rental type toggle fully wired
@@ -45,7 +45,7 @@ External charges,Payments,could,yes,yes,Full table at /external-charges
 Stripe integration,Payments,could,no,no,Skip v1; original also does not have it
 Calendar view (month/week),Calendar,must,yes,yes,Month calendar with reservation blocks + upcoming list
 Vehicle list,Fleet,must,yes,yes,Vehicle grid with status filter tabs and fuel indicators
-Add/edit vehicle,Fleet,must,yes,no,No add/edit vehicle form
+Add/edit vehicle,Fleet,must,yes,yes,Add vehicle form at /fleets/vehicles/new with server action
 Vehicle detail with history,Fleet,must,yes,no,No vehicle detail page
 Vehicle classes/categories,Fleet,must,yes,yes,Vehicle classes seeded; used in wizard and dashboard
 Vehicle status management,Fleet,must,yes,yes,15 status values; filter tabs + badge on vehicle grid
@@ -54,7 +54,7 @@ Maintenance records,Fleet,should,yes,yes,Maintenance table at /maintenance
 Repair orders,Fleet,should,yes,yes,Repair orders table at /repair-orders
 Telematics/GPS,Fleet,could,yes,skip,Requires 3rd-party integration; out of scope v1
 Contacts list,Contacts,must,yes,yes,Customers table with DL expiry warning
-Add/edit contact (customer),Contacts,must,yes,no,No create/edit contact form
+Add/edit contact (customer),Contacts,must,yes,yes,Add customer form at /contacts/customers/new with server action
 Contact detail with reservation history,Contacts,must,yes,yes,Customer detail page with reservation list
 License & ID storage,Contacts,should,yes,yes,DL number + expiry with warning icon on list
 Customer blacklist flag,Contacts,should,yes,no,Not implemented

@@ -19,10 +19,12 @@ export default async function CustomersPage() {
           <h1 className="text-2xl font-semibold text-[var(--color-text)]">Customers</h1>
           <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{customers.length} customer{customers.length !== 1 ? "s" : ""}</p>
         </div>
-        <Button size="sm">
-          <Plus className="h-3.5 w-3.5" />
-          Add Customer
-        </Button>
+        <Link href="/contacts/customers/new">
+          <Button size="sm">
+            <Plus className="h-3.5 w-3.5" />
+            Add Customer
+          </Button>
+        </Link>
       </div>
 
       <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden">
